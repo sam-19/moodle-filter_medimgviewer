@@ -22,8 +22,9 @@
 
 class filter_medigiviewer extends moodle_text_filter {
     public function filter($text, array $options = array()) {
+        global $CFG;
         $filtertag = get_config('filter_medigiviewer', 'filtertag');
-        $extensions = get_config('filter_medigiviewer', 'extensions').explode(',');
+        $extensions = explode(',', get_config('filter_medigiviewer', 'extensions'));
         if (!is_string($text) or empty($text)) {
             // Non-string data can not be filtered anyway.
             return $text;
@@ -35,9 +36,35 @@ class filter_medigiviewer extends moodle_text_filter {
         // Match all MEDigi viewer media tags
         $pattern = "/<!--".$filtertag."(.+?)-->/i";
         if (preg_match_all($pattern, $text, $matches)) {
-            $allresults = array();
-            foreach ($matches[0] as $key => $match) {
-                $text = str_replace($match, '<div id="medigi-viewer-'.$key.'" data-resource-url="'.trim($matches[1][$key]).'"></div>', $text);
+            $filesys = array();
+            $check = array();
+            foreach ($matches[0] as $idx => $match) {
+                // Fetch contents of the data resource directory
+                $dirlist = get_directory_list($CFG->dataroot.'/repository/imaging/radiology/dicom/example1/');
+                foreach ($dirlist as $key => $value) {
+                    // By drapeko https://www.php.net/manual/en/ref.filesystem.php#91075
+                    // TODO: FOR TESTING PURPOSES ONLY! THIS ABSOLUTELY HAS TO BE CHANGED FOR PRODUCTION!
+                    // Using eval() even in such a restricted context is a no go.
+                    $path = '[\''.str_replace('/', '\'][\'', $value).'\']';
+                    foreach($check as $ck) {
+                        if (strpos($ck, $path) !== false) {
+                            continue;
+                        }
+                    }
+                    array_push($check, $path);
+                    eval('$filesys'.$path.' = array("type" => "file");');
+                    continue;
+                    $path = explode($value, '/');
+                    foreach ($path as $idy => $dir) {
+                        if ($idy < len($path) - 1) {
+                            // Still in a parent directory
+                            if (!array_key_exists($dir, $filesys)) {
+
+                            }
+                        }
+                    }
+                }
+                $text = str_replace($match, "<div id='medigi-viewer-".$key."' data-resource-url='".json_encode($filesys)."'></div>", $text);
             }
         }
         return $text;
