@@ -22,17 +22,23 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-class filter_medigiviewer extends moodle_text_filter {
-    public function filter($text, array $options = array()) {
-        $filtertag = get_config('filter_medigiviewer', 'filtertag');
-        $extensions = get_config('filter_medigiviewer', 'extensions').explode(',');
-        if (!is_string($text) or empty($text)) {
-            // Non-string data can not be filtered anyway.
-            return $text;
-        }
-        if (stripos($text, '</a>') === false && stripos($text, `<!--$filtertag`) === false) {
-            // Performance shortcut - if there is no </a> tag or filter tag, nothing can match.
-            return $text;
-        }
+class medigiviewer_filter_local_settings_form extends filter_local_settings_form {
+    protected function definition_inner($mform) {
+        // Fetch global config options
+        $globalconf = get_config('filter_medigiviewer');
+        // Use automatic filter
+        $mform->addElement(
+            'advcheckbox',
+            'automatic',
+            get_string('automatic', 'filter_medigiviewer'),
+            '',
+            array('group' => 1),
+            array(0, 1)
+        );
+        $mform->setType('automatic', PARAM_INT);
+        $mform->setDefault('automatic',
+            // Use global configuration default or true if global conf is not set
+            ($globalconf && property_exists($globalconf, 'automatic')) ? $globalconf->automatic : 1
+        );
     }
 }

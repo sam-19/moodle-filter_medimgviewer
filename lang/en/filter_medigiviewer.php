@@ -20,14 +20,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 // General strings
 $string['filtername'] = 'MEDigi Viewer';
 $string['filtername_plural'] = 'MEDigi Viewers';
 
 // Config strings
+$string['automatic'] = 'Open compatible files automatically';
+$string['automatic_desc'] = 'Linked files with the given extensions will be automatically loaded with the MEDigi Viewer. Disable if you want to allow downloading linked files.';
 $string['extensions'] = 'Apply to file extensions';
-$string['extensions_desc'] = 'Files with these extensions will be automatically loaded with the MEDigi Viewer. Separate individual extensions with commas.';
+$string['extensions_desc'] = 'Linked files with these extensions will be automatically opened. Separate individual extensions with commas.';
 $string['filtertag'] = 'MEDigi Viewer media tag';
-$string['extensions_desc'] = 'MEDigi Viewer filter will use this HTML comment tag to recognize compatible media resources.';
+$string['filtertag_desc'] = 'MEDigi Viewer filter will use this HTML comment tag to recognize compatible media resources.';

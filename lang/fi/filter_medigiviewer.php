@@ -20,14 +20,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 // Yleiset tekstit
 $string['filtername'] = 'MEDigi-katselin';
 $string['filtername_plural'] = 'MEDigi-katselimet';
 
 // Määrittelysivun tekstit
+$string['automatic'] = 'Avaa yhteensopivat tiedostot automaattisesti';
+$string['automatic_desc'] = 'Linkitetyt tiedostot, joilla on yhteensopiva tiedostopääte, avataan automaattisesti MEDigi-katselimessa. Poista käytöstä, jos haluat mahdollistaa linkitettyjen tiedostojen lataamisen.';
 $string['extensions'] = 'Käytä tiedostopäätteiden kanssa';
-$string['extensions_desc'] = 'Tiedostot, joilla on joku listan päätteistä, avataan automaattisesti MEDigi-katselimella. Erottele tiedostopäätteet pilkuilla';
+$string['extensions_desc'] = 'Tiedostot, joilla on joku listan päätteistä, avataan automaattisesti MEDigi-katselimella. Erottele tiedostopäätteet pilkuilla.';
 $string['filtertag'] = 'MEDigi-katselimen mediatunniste';
-$string['extensions_desc'] = 'MEDigi-katselin poimii sisällöstä linkit yhteensopiviin mediaresursseihin tämän tunnisteen perusteella.';
+$string['filtertag_desc'] = 'MEDigi-katselin poimii sisällöstä linkit yhteensopiviin mediaresursseihin tämän tunnisteen perusteella.';
