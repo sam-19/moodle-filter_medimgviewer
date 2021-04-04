@@ -20,6 +20,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once("$CFG->libdir/filelib.php");
+require_once("$CFG->libdir/moodlelib.php");
+//require_once("$CFG->libdir/weblib.php");
+
 class filter_medigiviewer extends moodle_text_filter {
     public function filter($text, array $options = array()) {
         global $CFG;
@@ -36,35 +40,34 @@ class filter_medigiviewer extends moodle_text_filter {
         // Match all MEDigi viewer media tags
         $pattern = "/<!--".$filtertag."(.+?)-->/i";
         if (preg_match_all($pattern, $text, $matches)) {
-            $filesys = array();
-            $check = array();
-            foreach ($matches[0] as $idx => $match) {
-                // Fetch contents of the data resource directory
-                $dirlist = get_directory_list($CFG->dataroot.'/repository/imaging/radiology/dicom/example1/');
-                foreach ($dirlist as $key => $value) {
-                    // By drapeko https://www.php.net/manual/en/ref.filesystem.php#91075
-                    // TODO: FOR TESTING PURPOSES ONLY! THIS ABSOLUTELY HAS TO BE CHANGED FOR PRODUCTION!
-                    // Using eval() even in such a restricted context is a no go.
-                    $path = '[\''.str_replace('/', '\'][\'', $value).'\']';
-                    foreach($check as $ck) {
-                        if (strpos($ck, $path) !== false) {
-                            continue;
-                        }
-                    }
-                    array_push($check, $path);
-                    eval('$filesys'.$path.' = array("type" => "file");');
-                    continue;
-                    $path = explode($value, '/');
-                    foreach ($path as $idy => $dir) {
-                        if ($idy < len($path) - 1) {
-                            // Still in a parent directory
-                            if (!array_key_exists($dir, $filesys)) {
-
-                            }
-                        }
+            foreach ($matches[1] as $idx => $match) {
+                // Check if this is a pluginfile link
+                $plgfilestr = "/pluginfile.php/";
+                $plgfilepos = strpos($match, $plgfilestr);
+                $result = [
+                    'areaPath' => false,
+                    'filePath' => false,
+                    'fileTree' => []
+                ];
+                if ($plgfilepos !== false) {
+                    // Fetching params with lib/weblib.php:get_file_argument() doesn't seem to work even
+                    // if I manually set $_SERVER['REQUEST_URI'] to match the file link
+                    $fileargs = explode('/', substr($match, $plgfilepos + strlen($plgfilestr)));
+                    if (count($fileargs) > 3) {
+                        // Separate area and file path and decode URL codes from path
+                        $areapath = array_slice($fileargs, 0, 3);
+                        $filepath = array_slice($fileargs, 3);
+                        foreach ($areapath as &$value) { $value = urldecode($value); }
+                        foreach ($filepath as &$value) { $value = urldecode($value); }
+                        $result['areaPath'] = $areapath;
+                        $result['filePath'] = $filepath;
+                        // Get file area tree with lib/filestorage/file_storage.php:get_area_tree()
+                        $result['fileTree'] = get_file_storage()->get_area_tree($fileargs[0], $fileargs[1], $fileargs[2], false);
                     }
                 }
-                $text = str_replace($match, "<div id='medigi-viewer-".$key."' data-resource-url='".json_encode($filesys)."'></div>", $text);
+                // Replace the placeholder with a hidden div (where the inline app will be loaded as well)
+                $return_el = "<div style='display:none' id='medigi-viewer-inline-$idx' data-resource='".json_encode($result)."'></div>";
+                $text = str_replace($matches[0][$idx], $return_el, $text);
             }
         }
         return $text;
