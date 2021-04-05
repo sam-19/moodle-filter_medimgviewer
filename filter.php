@@ -67,7 +67,9 @@ class filter_medigiviewer extends moodle_text_filter {
                     }
                 }
                 // Replace the placeholder with a hidden div (where the inline app will be loaded as well)
-                $return_el = "<div style='display:none' id='medigi-viewer-inline-$idx' data-resource='".json_encode($result)."'></div>";
+                $return_el = "<div style='width:100%;height:800px'>
+                    <div style='display:none;height:400px' id='medigi-viewer-inline-$idx' data-resource='".json_encode($result)."'></div>
+                </div>";
                 $text = str_replace($matches[0][$idx], $return_el, $text);
                 // Load Vue frontend
                 $PAGE->requires->js_call_amd('filter_medigiviewer/viewer', 'createMEDigiViewerInstance', [
