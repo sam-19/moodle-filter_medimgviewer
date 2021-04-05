@@ -27,6 +27,7 @@ require_once("$CFG->libdir/moodlelib.php");
 class filter_medigiviewer extends moodle_text_filter {
     public function filter($text, array $options = array()) {
         global $CFG;
+        global $PAGE;
         $filtertag = get_config('filter_medigiviewer', 'filtertag');
         $extensions = explode(',', get_config('filter_medigiviewer', 'extensions'));
         if (!is_string($text) or empty($text)) {
@@ -68,6 +69,19 @@ class filter_medigiviewer extends moodle_text_filter {
                 // Replace the placeholder with a hidden div (where the inline app will be loaded as well)
                 $return_el = "<div style='display:none' id='medigi-viewer-inline-$idx' data-resource='".json_encode($result)."'></div>";
                 $text = str_replace($matches[0][$idx], $return_el, $text);
+                // Load Vue frontend
+                $app_config = 
+                $PAGE->requires->js_call_amd('filter_medigiviewer/viewer', 'createMEDigiViewerInstance', [
+                    'config' => json_encode([
+                        'appName' => "inline-$idx", 
+                        'autoStart' => true,
+                        'environment' => 'moodle',
+                        'idSuffix' => "inline-$idx",
+                        'resource' => $result['fileTree'],
+                        'wpPublicPath' => "$CFG->wwwroot/filter/medigiviewer/amd/"
+                    ]),
+                    'jsonConfig' => true,
+                ]);
             }
         }
         return $text;

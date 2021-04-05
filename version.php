@@ -23,7 +23,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'filter_medigiviewer';
-$plugin->version = 20210328;
+$plugin->version = 20210405;
 $plugin->requires = 2016051900;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->release = '0.0.1';
