@@ -70,7 +70,6 @@ class filter_medigiviewer extends moodle_text_filter {
                 $return_el = "<div style='display:none' id='medigi-viewer-inline-$idx' data-resource='".json_encode($result)."'></div>";
                 $text = str_replace($matches[0][$idx], $return_el, $text);
                 // Load Vue frontend
-                $app_config = 
                 $PAGE->requires->js_call_amd('filter_medigiviewer/viewer', 'createMEDigiViewerInstance', [
                     'config' => json_encode([
                         'appName' => "inline-$idx", 
