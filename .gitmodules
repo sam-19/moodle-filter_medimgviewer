@@ -1,0 +1,3 @@
+[submodule "src/imaging-viewer"]
+	path = src/imaging-viewer
+	url = git@gitlab:medigi/imaging-viewer.git
