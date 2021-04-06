@@ -1,0 +1,19 @@
+{
+  "name": "medigi-moodle-filter",
+  "version": "0.0.1",
+  "description": "Filter plugin to dipslay the MEDigi Viewer in Moodle",
+  "main": "index.js",
+  "scripts": {
+    "build": "node node_modules/webpack/bin/webpack.js --progress --config webpack.config.js",
+    "build:viewer": "cd src/imaging-viewer && npm run build",
+    "build:copy": "node node_modules/ncp/lib/ncp.js ./src/imaging-viewer/dist/viewer.js ./js/viewer.js",
+    "test": "echo \"Warning: Do not run tests on submodule sources here, run them in individual submodule repositories!\" && exit 1"
+  },
+  "author": "Sampsa Lohi",
+  "license": "MIT",
+  "devDependencies": {
+    "ncp": "^2.0.0",
+    "webpack": "^5.30.0",
+    "webpack-cli": "^4.6.0"
+  }
+}
