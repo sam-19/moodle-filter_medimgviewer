@@ -41,8 +41,9 @@ class filter_medigiviewer extends moodle_text_filter {
             return $text;
         }
         // Match all MEDigi viewer media tags
-        $pattern = "/<!--".$filtertag."(.+?)-->/i";
+        $pattern = "/\<a.*?\>(.+?)#".$filtertag."\<\/a\>/i";
         if (preg_match_all($pattern, $text, $matches)) {
+            // Add required external libraries
             $id = optional_param('id', 0, PARAM_INT); // Course ID
             foreach ($matches[1] as $idx => $match) {
                 // Check if this is a pluginfile link
@@ -63,15 +64,17 @@ class filter_medigiviewer extends moodle_text_filter {
                         foreach ($filepart as &$value) { $value = urldecode($value); }
                         $areapath = implode('/', $areapart);
                         $filepath = implode('/', $filepart);
-                        // Get file area tree with lib/filestorage/file_storage.php:get_area_tree()
-                        $filetree = get_file_storage()->get_area_tree($fileargs[0], $fileargs[1], $fileargs[2], false);
+                    } else {
+                        $areapart = $fileargs;
+                        foreach ($areapart as &$value) { $value = urldecode($value); }
+                        $areapath = implode('/', $areapart);
                     }
                 } else {
                     return $text;
                 }
                 // Replace the placeholder with a hidden div (where the inline app will be loaded as well)
-                $return_el = "<div style='width:100%;height:800px'>
-                    <div style='display:none' id='medigi-viewer-inline-$idx' data-resource='".json_encode($result)."'></div>
+                $return_el = "<div class='medigi-viewer-inline'>
+                    <div 'style=display:none' id='medigi-viewer-inline-$idx'></div>
                 </div>";
                 $text = str_replace($matches[0][$idx], $return_el, $text);
                 // Load the viewer module
@@ -86,7 +89,6 @@ class filter_medigiviewer extends moodle_text_filter {
                 ]);
             }
         }
-        //$PAGE->requires->js(new moodle_url($CFG->wwwroot.'/filter/medigiviewer/js/viewer.js'));
         return $text;
     }
 }

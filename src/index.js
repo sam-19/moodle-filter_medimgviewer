@@ -69,23 +69,37 @@ function init (cmId, appName, idSuffix, urlRoot, areaPath, filePath, autoStart=f
     if (!urlRoot || !areaPath || !filePath) {
         return
     }
-    define([M.cfg.wwwroot + '/filter/medigiviewer/js/viewer.js'], (MDV) => {
+    console.log(areaPath, filePath)
+    //require.config({
+    //    enforceDefine: false
+    //})
+    define([
+        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/vue.min.js',
+        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/hammer.min.js',
+        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/plotly.min.js',
+        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/dicom-parser.min.js',
+        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/cornerstone.min.js',
+        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/cornerstone-math.min.js',
+        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/cornerstone-tools.min.js',
+        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/cornerstone-wado-image-loader.min.js',
+        M.cfg.wwwroot + '/filter/medigiviewer/js/medigi-viewer.min.js',
+    ], (/*Vue, Hammer, plotly, dicomParser, cornerstone, cornerstoneMath, cornerstoneTools, cornerstoneWADOImageLoader,*/ MDV) => {
         $.ajax({
             url: M.cfg.wwwroot + '/filter/medigiviewer/api.php',
-            data: { id: cmId,  filearea: areaPath },
+            data: { id: cmId,  filearea: areaPath, filepath: filePath },
             type: 'GET',
             dataType: 'json',
         }).done(async (result) => {
-            console.log("DONE")
+            const jsDir = M.cfg.wwwroot + '/filter/medigiviewer/vendor/'
+            console.log(result)
+            result = result.dir
             const MEDigiViewer = MDV.MEDigiViewer
-            console.log(MEDigiViewer)
             const viewer = new MEDigiViewer(
                 appName,
                 idSuffix,
                 locale,
                 M.cfg.wwwroot + '/filter/medigiviewer/amd/'
             )
-            console.log(viewer)
             if (autoStart) {
                 await viewer.show()
                 // Read the file area directory structure and convert it to MEDigiViewer-compatible object
@@ -107,7 +121,7 @@ function init (cmId, appName, idSuffix, urlRoot, areaPath, filePath, autoStart=f
                     }
                     return newDir
                 }
-                const fsTree = readDir(result, '', urlRoot + areaPath)
+                const fsTree = readDir(result, result.path, urlRoot + areaPath + result.path)
                 console.log(fsTree)
                 viewer.loadFsItem(fsTree)
             }

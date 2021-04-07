@@ -26,16 +26,33 @@ require_once("$CFG->libdir/moodlelib.php");
 
 $id = optional_param('id', 0, PARAM_INT); // Course module ID
 $fa = optional_param('filearea', false, PARAM_PATH); // Path to the requested file tree
+$fp = optional_param('filepath', false, PARAM_PATH); // Path of the root file
 
 if ($id && $fa) {
     list($course, $cm) = get_course_and_cm_from_cmid($id);
     require_login($course, true, $cm);
-    $areaparts = explode('/', urldecode($fa));
+    $areaparts = explode('/', trim(urldecode($fa)));
+    $fileparts = explode('/', trim(urldecode($fp)));
     $filetree = get_file_storage()->get_area_tree($areaparts[0], $areaparts[1], $areaparts[2], false);
+    $dir = $filetree;
+    $path = '';
+    $dir['path'] = $path;
+    foreach ($fileparts as $idx => $part) {
+        if (!empty($dir['subdirs']) && array_key_exists($part, $dir['subdirs'])) {
+            $dir = $dir['subdirs'][$part];
+        } else if (!empty($dir['files']) && array_key_exists($part, $dir['files'])) {
+            // The file entries are empty, so add at least the file name
+            $dir['filename'] = $part;
+        }
+        $path = $path."/".$part;
+        $dir['path'] = $path;
+    }
     $result = [
-        'fa' => $fa,
-        'ft' => $filetree
+        'ft' => $filetree,
+        'dir' => $dir,
+        'ap' => $areaparts,
+        'fp' => $fileparts
     ];
     //echo(json_encode($result));
-    echo json_encode($filetree);
+    echo json_encode($result);
 }

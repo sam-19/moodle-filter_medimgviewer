@@ -1,7 +1,6 @@
-amd/build/*.js
-amd/build/*.js.*
-amd/src/*.js
-amd/src/*.js.*
+# Ignore all javascript files
+*.js
+*.js.*
 
 # Ignore the entire source directory
 node_modules/
