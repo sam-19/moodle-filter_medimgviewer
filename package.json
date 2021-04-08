@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node node_modules/webpack/bin/webpack.js --progress --config webpack.config.js",
-    "build:viewer": "cd src/imaging-viewer && npm run build",
-    "build:copy": "node node_modules/ncp/lib/ncp.js ./src/imaging-viewer/dist/viewer.js ./js/viewer.js",
+    "build:viewer": "cd src/imaging-viewer && npm run build:amd && cd ../.. && node node_modules/ncp/bin/ncp ./src/imaging-viewer/dist/medigi-viewer-amd.js ./js/medigi-viewer-amd.min.js",
     "test": "echo \"Warning: Do not run tests on submodule sources here, run them in individual submodule repositories!\" && exit 1"
   },
   "author": "Sampsa Lohi",
