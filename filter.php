@@ -36,18 +36,19 @@ class filter_medigiviewer extends moodle_text_filter {
             // Non-string data can not be filtered anyway.
             return $text;
         }
-        if (stripos($text, '</a>') === false && stripos($text, '<!--'.$filtertag) === false) {
+        if (stripos($text, '</a>') === false && stripos($text, $filtertag) === false) {
             // Performance shortcut - if there is no </a> tag or filter tag, nothing can match.
             return $text;
         }
         // Match all MEDigi viewer media tags
-        $pattern = "/\<a.*?\>(.+?)#".$filtertag."\<\/a\>/i";
+        $pattern = "/\<a(.+?)href=\"(.+?):".$filtertag."\"\>(.+?)\<\/a\>/i";
         if (preg_match_all($pattern, $text, $matches)) {
-            // Add required external libraries
+            // Add resources in one array
+            $resources = [];
             $id = optional_param('id', 0, PARAM_INT); // Course ID
-            foreach ($matches[1] as $idx => $match) {
+            $plgfilestr = "/pluginfile.php/";
+            foreach ($matches[2] as $idx => $match) {
                 // Check if this is a pluginfile link
-                $plgfilestr = "/pluginfile.php/";
                 $plgfilepos = strpos($match, $plgfilestr);
                 $areapath = '';
                 $filepath = '';
@@ -70,22 +71,28 @@ class filter_medigiviewer extends moodle_text_filter {
                         $areapath = implode('/', $areapart);
                     }
                 } else {
-                    return $text;
+                    continue;
                 }
                 // Replace the placeholder with a hidden div (where the inline app will be loaded as well)
                 $return_el = "<div class='medigi-viewer-inline'>
                     <div 'style=display:none' id='medigi-viewer-inline-$idx'></div>
                 </div>";
-                $text = str_replace($matches[0][$idx], $return_el, $text);
-                // Load the viewer module
-                $PAGE->requires->js_call_amd('filter_medigiviewer/loader-lazy', 'init', [
-                    'cmId' => $PAGE->cm->id,
+                // Only replace the first match (in case the same resource is linked multiple times)
+                $pos = strpos($text, $matches[0][$idx]);
+                $text = substr_replace($text, $return_el, $pos, strlen($matches[0][$idx]));
+                // Add to list of resources
+                array_push($resources, [
                     'appName' => "inline-$idx",
                     'idSuffix' => "inline-$idx",
-                    'urlRoot' => substr($match, 0, $plgfilepos + strlen($plgfilestr)),
                     'areaPath' => $areapath,
                     'filePath' => $filepath,
-                    'autoStart' => true
+                ]);
+            }
+            if (!empty($resources)) {
+                // Load the viewer module
+                $PAGE->requires->js_call_amd('filter_medigiviewer/loader', 'init', [
+                    'cmId' => $PAGE->cm->id,
+                    'resources' => $resources,
                 ]);
             }
         }

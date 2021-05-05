@@ -8,8 +8,8 @@ module.exports = {
     mode: 'production',
     devtool: 'source-map',
     entry: {
-        "src/loader-lazy": { import: path.join(__dirname, 'src', 'index.js') },
-        "build/loader-lazy.min": { import: path.join(__dirname, 'src', 'index.js') },
+        "src/loader": { import: path.join(__dirname, 'src', 'index.js') },
+        "build/loader.min": { import: path.join(__dirname, 'src', 'index.js') },
     },
     output: {
         path: path.resolve(__dirname, 'amd'),

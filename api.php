@@ -25,8 +25,13 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/moodlelib.php");
 
 $id = optional_param('id', 0, PARAM_INT); // Course module ID
-$fa = optional_param('filearea', false, PARAM_PATH); // Path to the requested file tree
-$fp = optional_param('filepath', false, PARAM_PATH); // Path of the root file
+$fa = optional_param('filearea', '', PARAM_PATH); // Path to the requested file tree
+// Trim the filepath arguments, as the manually inserted part may have a traling space
+$fp = trim(optional_param('filepath', '', PARAM_PATH)); // Path of the root file
+// Check if file path has a trailing slash and remove it
+if (substr($fp, -1) == '/') {
+    $fp = mb_substr($fp, 0, -1);
+}
 
 if ($id && $fa) {
     list($course, $cm) = get_course_and_cm_from_cmid($id);

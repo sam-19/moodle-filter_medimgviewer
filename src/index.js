@@ -21,40 +21,6 @@
 
  __webpack_public_path__ = M.cfg.wwwroot + '/filter/medigiviewer/amd/'
 
-const VIEWERS = []
-/**
- * Create a new viewer instance and add it to the list.
- * @param appName unique name for this viewer
- * @param idSuffix suffix to add after mounting div id
- * @param autoStart load the viewer automatically (default false)
- * @param locale app locale (optional)
- */
-function createMEDigiViewerInstance (appName, idSuffix, autoStart=false, locale='en') {
-    const viewer = new MEDigiViewer(appName, idSuffix, locale, __webpack_public_path__)
-    if (autoStart) {
-        viewer.show()
-    }
-    VIEWERS.push(viewer)
-    return viewer
-}
-/**
- * Get the first MEDigiViewer by given appName or if omitted, the last created viewer instance.
- * @param appName optional app id
- * @returns MEDigiViewer or undefined
- */
-function getMEDigiViewerInstance (appName) {
-    if (appName) {
-        for (let i=0; i<VIEWERS.length; i++) {
-            if (VIEWERS[i].appName === appName) {
-                return VIEWERS[i]
-            }
-        }
-    } else if (VIEWERS.length) {
-        return VIEWERS[VIEWERS.length -1]
-    }
-    return undefined
-}
-
 /**
  * Create a new MEDigiViewer instance.
  * @param cmId course module ID
@@ -65,34 +31,13 @@ function getMEDigiViewerInstance (appName) {
  * @param autoStart load the viewer automatically (default false)
  * @param locale app locale (optional)
  */
-function init (cmId, appName, idSuffix, urlRoot, areaPath, filePath, autoStart=false, locale='en') {
-    if (!urlRoot || !areaPath || !filePath) {
-        return
-    }
-    console.log(areaPath, filePath)
+function init (cmId, resources, locale='en') {
     //require.config({
     //    enforceDefine: false
     //})
-    define([
-        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/vue.min.js',
-        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/hammer.min.js',
-        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/plotly.min.js',
-        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/dicom-parser.min.js',
-        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/cornerstone.min.js',
-        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/cornerstone-math.min.js',
-        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/cornerstone-tools.min.js',
-        //M.cfg.wwwroot + '/filter/medigiviewer/vendor/cornerstone-wado-image-loader.min.js',
-        M.cfg.wwwroot + '/filter/medigiviewer/js/medigi-viewer.min.js',
-    ], (/*Vue, Hammer, plotly, dicomParser, cornerstone, cornerstoneMath, cornerstoneTools, cornerstoneWADOImageLoader,*/ MDV) => {
-        $.ajax({
-            url: M.cfg.wwwroot + '/filter/medigiviewer/api.php',
-            data: { id: cmId,  filearea: areaPath, filepath: filePath },
-            type: 'GET',
-            dataType: 'json',
-        }).done(async (result) => {
-            const jsDir = M.cfg.wwwroot + '/filter/medigiviewer/vendor/'
-            console.log(result)
-            result = result.dir
+    define([M.cfg.wwwroot + '/filter/medigiviewer/js/medigi-viewer.min.js'], (MDV) => {
+        // Wrap the viewer loader in an async function
+        const loadViewer = async (appName, idSuffix, fsItem) => {
             const MEDigiViewer = MDV.MEDigiViewer
             const viewer = new MEDigiViewer(
                 appName,
@@ -100,34 +45,69 @@ function init (cmId, appName, idSuffix, urlRoot, areaPath, filePath, autoStart=f
                 locale,
                 M.cfg.wwwroot + '/filter/medigiviewer/amd/'
             )
-            if (autoStart) {
-                await viewer.show()
-                // Read the file area directory structure and convert it to MEDigiViewer-compatible object
-                const readDir = (dir, path, url) => {
-                    const newDir = { name: dir.dirname, path: path, type: 'directory', directories: [], files: [] }
-                    if (!$.isEmptyObject(dir.files)) {
-                        Object.keys(dir.files).forEach(fileName => {
-                            newDir.files.push(
-                                { name: fileName, type: 'file', path: `${path}/${fileName}`, url: `${url}/${fileName}`, directories: [], files: [] }
-                            )
-                        })
-                    }
-                    if (!$.isEmptyObject(dir.subdirs)) {
-                        Object.values(dir.subdirs).forEach(subDir => {
-                            newDir.directories.push(
-                                readDir(subDir, `${path}/${subDir.dirname}`, `${url}/${subDir.dirname}`)
-                            )
-                        })
-                    }
-                    return newDir
-                }
-                const fsTree = readDir(result, result.path, urlRoot + areaPath + result.path)
-                console.log(fsTree)
-                viewer.loadFsItem(fsTree)
+            await viewer.show()
+            viewer.loadFsItem(fsItem)
+        }
+        const fileRoot = M.cfg.wwwroot + '/pluginfile.php/'
+        resources.forEach(r => {
+            if (!r.appName || !r.areaPath || !r.filePath) {
+                return
             }
-        }).fail((request, reason) => {
-            console.log(`Loading file tree failed: ${reason}`)
-        })
+            // Check if we need to fetch the file tree for directory browsing
+            if (r.filePath.endsWith('/')) {
+                $.ajax({
+                    url: M.cfg.wwwroot + '/filter/medigiviewer/api.php',
+                    data: { id: cmId,  filearea: r.areaPath, filepath: r.filePath },
+                    type: 'GET',
+                    dataType: 'json',
+                }).done(async (result) => {
+                    result = result.dir
+                    // Read the file area directory structure and convert it to MEDigiViewer-compatible object
+                    const readDir = (dir, path, url) => {
+                        const newDir = { name: dir.dirname, path: path, type: 'directory', directories: [], files: [] }
+                        if (!$.isEmptyObject(dir.files)) {
+                            Object.keys(dir.files).forEach(fileName => {
+                                newDir.files.push(
+                                    { name: fileName, type: 'file', path: `${path}/${fileName}`, url: `${url}/${fileName}`, directories: [], files: [] }
+                                )
+                            })
+                        }
+                        if (!$.isEmptyObject(dir.subdirs)) {
+                            Object.values(dir.subdirs).forEach(subDir => {
+                                newDir.directories.push(
+                                    readDir(subDir, `${path}/${subDir.dirname}`, `${url}/${subDir.dirname}`)
+                                )
+                            })
+                        }
+                        return newDir
+                    }
+                    const fsTree = readDir(result, result.path, fileRoot + r.areaPath + result.path)
+                    loadViewer(r.appName, r.idSuffix, fsTree)
+                }).fail((request, reason) => {
+                    console.log(`Loading file tree failed: ${reason}`)
+                })
+            } else {
+                // Otherwise just load the linked file
+                const fileParts = r.filePath.split('/')
+                const fileName = decodeURIComponent(fileParts[fileParts.length - 1])
+                const file = {
+                    path: '',
+                    name: '/',
+                    type: 'directory',
+                    directories: [],
+                    files: [
+                        {
+                            name: fileName,
+                            path: `/${fileName}`,
+                            url: `${fileRoot + r.areaPath}/${r.filePath}`,
+                        },
+                    ],
+                }
+                // Load the viewer
+                loadViewer(r.appName, r.idSuffix, file)
+            }
+        });
+
     })
 }
 
