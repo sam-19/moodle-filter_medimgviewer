@@ -41,13 +41,13 @@ class filter_medigiviewer extends moodle_text_filter {
             return $text;
         }
         // Match all MEDigi viewer media tags
-        $pattern = "/\<a(.+?)href=\"(.+?):".$filtertag."\"\>(.+?)\<\/a\>/i";
+        $pattern = "/\<a[^\>]+?href=\"(.+?):".$filtertag."\"\>(.+?)\<\/a\>/i";
         if (preg_match_all($pattern, $text, $matches)) {
             // Add resources in one array
             $resources = [];
             $id = optional_param('id', 0, PARAM_INT); // Course ID
             $plgfilestr = "/pluginfile.php/";
-            foreach ($matches[2] as $idx => $match) {
+            foreach ($matches[1] as $idx => $match) {
                 // Check if this is a pluginfile link
                 $plgfilepos = strpos($match, $plgfilestr);
                 $areapath = '';
