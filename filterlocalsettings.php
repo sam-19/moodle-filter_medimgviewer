@@ -14,23 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/** MEDIGI VIEWER FILTER
- * @package    medigi-viewer
+/** MEDICAL IMAGING STUDY VIEWER FILTER
+ * @package    medimg-viewer
  * @copyright  2021 Sampsa Lohi
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-class medigiviewer_filter_local_settings_form extends filter_local_settings_form {
+class medimgviewer_filter_local_settings_form extends filter_local_settings_form {
     protected function definition_inner($mform) {
         // Fetch global config options
-        $globalconf = get_config('filter_medigiviewer');
+        $globalconf = get_config('filter_medimgviewer');
         // Use automatic filter
         $mform->addElement(
             'advcheckbox',
             'automatic',
-            get_string('automatic', 'filter_medigiviewer'),
+            get_string('automatic', 'filter_medimgviewer'),
             '',
             array('group' => 1),
             array(0, 1)

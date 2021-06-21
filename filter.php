@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/** MEDIGI VIEWER FILTER
- * @package    medigi-viewer
+/** MEDICAL IMAGING STUDY VIEWER FILTER
+ * @package    medimg-viewer
  * @copyright  2021 Sampsa Lohi
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,12 +26,12 @@ require_once("$CFG->libdir/moodlelib.php");
 // Prevent JS caching for development
 $CFG->cachejs = false;
 
-class filter_medigiviewer extends moodle_text_filter {
+class filter_medimgviewer extends moodle_text_filter {
     public function filter($text, array $options = array()) {
         global $CFG;
         global $PAGE;
-        $filtertag = get_config('filter_medigiviewer', 'filtertag');
-        $extensions = explode(',', get_config('filter_medigiviewer', 'extensions'));
+        $filtertag = get_config('filter_medimgviewer', 'filtertag');
+        $extensions = explode(',', get_config('filter_medimgviewer', 'extensions'));
         if (!is_string($text) or empty($text)) {
             // Non-string data can not be filtered anyway.
             return $text;
@@ -40,7 +40,7 @@ class filter_medigiviewer extends moodle_text_filter {
             // Performance shortcut - if there is no </a> tag or filter tag, nothing can match.
             return $text;
         }
-        // Match all MEDigi viewer media tags
+        // Match all MedImg viewer media tags
         $pattern = "/\<a[^\>]+?href=\"(.+?):".$filtertag."\"\>(.+?)\<\/a\>/i";
         if (preg_match_all($pattern, $text, $matches)) {
             // Add resources in one array
@@ -74,8 +74,8 @@ class filter_medigiviewer extends moodle_text_filter {
                     continue;
                 }
                 // Replace the placeholder with a hidden div (where the inline app will be loaded as well)
-                $return_el = "<div class='medigi-viewer-inline'>
-                    <div 'style=display:none' id='medigi-viewer-inline-$idx'></div>
+                $return_el = "<div class='medimg-viewer-inline'>
+                    <div 'style=display:none' id='medimg-viewer-inline-$idx'></div>
                 </div>";
                 // Only replace the first match (in case the same resource is linked multiple times)
                 $pos = strpos($text, $matches[0][$idx]);
@@ -90,7 +90,7 @@ class filter_medigiviewer extends moodle_text_filter {
             }
             if (!empty($resources)) {
                 // Load the viewer module
-                $PAGE->requires->js_call_amd('filter_medigiviewer/loader', 'init', [
+                $PAGE->requires->js_call_amd('filter_medimgviewer/loader', 'init', [
                     'cmId' => $PAGE->cm->id,
                     'resources' => $resources,
                 ]);

@@ -14,16 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/** MEDIGI VIEWER FILTER
- * @package    medigi-viewer
+/** MEDICAL IMAGING STUDY VIEWER FILTER
+ * @package    medimg-viewer
  * @copyright  2021 Sampsa Lohi
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'filter_medigiviewer';
-$plugin->version = 2021040500;
+$plugin->component = 'filter_medimgviewer';
+$plugin->version = 2021062101;
 $plugin->requires = 2016051900;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->release = '0.0.1';

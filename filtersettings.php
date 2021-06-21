@@ -14,19 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/** MEDIGI VIEWER FILTER
- * @package    medigi-viewer
+/** MEDICAL IMAGING STUDY VIEWER FILTER
+ * @package    medimg-viewer
  * @copyright  2021 Sampsa Lohi
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$settings->add(new admin_setting_configtext('filter_medigiviewer/filtertag',
-    get_string('filtertag', 'filter_medigiviewer'),
-    get_string('filtertag_desc', 'filter_medigiviewer'), 'medigi-viewer-media', PARAM_NOTAGS)
+$settings->add(new admin_setting_configtext('filter_medimgviewer/filtertag',
+    get_string('filtertag', 'filter_medimgviewer'),
+    get_string('filtertag_desc', 'filter_medimgviewer'), 'medimg-viewer-media', PARAM_NOTAGS)
 );
-$settings->add(new admin_setting_configtext('filter_medigiviewer/extensions',
-    get_string('extensions', 'filter_medigiviewer'),
-    get_string('extensions_desc', 'filter_medigiviewer'), 'dcm,edf', PARAM_NOTAGS)
+$settings->add(new admin_setting_configtext('filter_medimgviewer/extensions',
+    get_string('extensions', 'filter_medimgviewer'),
+    get_string('extensions_desc', 'filter_medimgviewer'), 'dcm,edf', PARAM_NOTAGS)
 );

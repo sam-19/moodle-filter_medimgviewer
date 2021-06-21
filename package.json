@@ -1,11 +1,11 @@
 {
-  "name": "medigi-moodle-filter",
+  "name": "medimg-moodle-filter",
   "version": "0.0.1",
-  "description": "Filter plugin to dipslay the MEDigi Viewer in Moodle",
+  "description": "Filter plugin to display the Medical Imaging Study Viewer in Moodle",
   "main": "index.js",
   "scripts": {
     "build": "node node_modules/webpack/bin/webpack.js --progress --config webpack.config.js",
-    "build:viewer": "cd src/imaging-viewer && npm run build:amd && cd ../.. && node node_modules/ncp/bin/ncp ./src/imaging-viewer/dist/medigi-viewer-amd.js ./js/medigi-viewer-amd.min.js",
+    "build:viewer": "cd src/imaging-viewer && npm run build:amd && cd ../.. && node node_modules/ncp/bin/ncp ./src/imaging-viewer/dist/medimg-viewer-amd.js ./js/medimg-viewer-amd.min.js",
     "test": "echo \"Warning: Do not run tests on submodule sources here, run them in individual submodule repositories!\" && exit 1"
   },
   "author": "Sampsa Lohi",

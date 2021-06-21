@@ -13,16 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/** MEDIGI VIEWER FILTER
- * @package    medigi-viewer
+/** MEDICAL IMAGING STUDY VIEWER FILTER
+ * @package    medimg-viewer
  * @copyright  2021 Sampsa Lohi
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- __webpack_public_path__ = M.cfg.wwwroot + '/filter/medigiviewer/amd/'
+ __webpack_public_path__ = M.cfg.wwwroot + '/filter/medimgviewer/amd/'
 
 /**
- * Create a new MEDigiViewer instance.
+ * Create a new MedImgViewer instance.
  * @param cmId course module ID
  * @param appName unique name for this viewer
  * @param idSuffix suffix to add after mounting div id
@@ -35,15 +35,15 @@ function init (cmId, resources, locale='en') {
     //require.config({
     //    enforceDefine: false
     //})
-    define([M.cfg.wwwroot + '/filter/medigiviewer/js/medigi-viewer.min.js'], (MDV) => {
+    define([M.cfg.wwwroot + '/filter/medimgviewer/js/medimg-viewer.min.js'], (MIV) => {
         // Wrap the viewer loader in an async function
         const loadViewer = async (appName, idSuffix, fsItem) => {
-            const MEDigiViewer = MDV.MEDigiViewer
-            const viewer = new MEDigiViewer(
+            const MedImgViewer = MIV.MedImgViewer
+            const viewer = new MedImgViewer(
                 appName,
                 idSuffix,
                 locale,
-                M.cfg.wwwroot + '/filter/medigiviewer/amd/'
+                M.cfg.wwwroot + '/filter/medimgviewer/amd/'
             )
             await viewer.show()
             viewer.loadFsItem(fsItem)
@@ -56,13 +56,13 @@ function init (cmId, resources, locale='en') {
             // Check if we need to fetch the file tree for directory browsing
             if (r.filePath.endsWith('/')) {
                 $.ajax({
-                    url: M.cfg.wwwroot + '/filter/medigiviewer/api.php',
+                    url: M.cfg.wwwroot + '/filter/medimgviewer/api.php',
                     data: { id: cmId,  filearea: r.areaPath, filepath: r.filePath },
                     type: 'GET',
                     dataType: 'json',
                 }).done(async (result) => {
                     result = result.dir
-                    // Read the file area directory structure and convert it to MEDigiViewer-compatible object
+                    // Read the file area directory structure and convert it to MedImgViewer-compatible object
                     const readDir = (dir, path, url) => {
                         const newDir = { name: dir.dirname, path: path, type: 'directory', directories: [], files: [] }
                         if (!$.isEmptyObject(dir.files)) {
