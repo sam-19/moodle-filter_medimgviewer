@@ -45,8 +45,13 @@ function init (cmId, resources, locale='en') {
                 locale,
                 M.cfg.wwwroot + '/filter/medimgviewer/amd/'
             )
-            await viewer.show()
-            viewer.loadFsItem(fsItem)
+            viewer.show().then((result) => {
+                if (!result) {
+                    console.error("Viewer initialization error, app functionality may be limited!")
+                }
+                viewer.loadFsItem(fsItem)
+            })
+
         }
         const fileRoot = M.cfg.wwwroot + '/pluginfile.php/'
         resources.forEach(r => {
