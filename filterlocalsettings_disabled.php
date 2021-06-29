@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/** MEDICAL IMAGING STUDY VIEWER FILTER
+/** MEDICAL IMAGING STUDY VIEWER FILTER LOCAL SETTINGS
  * @package    medimg-viewer
  * @copyright  2021 Sampsa Lohi
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -23,6 +23,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 class medimgviewer_filter_local_settings_form extends filter_local_settings_form {
+    /* Do not enable automatic, extension-based link parsing at this point
     protected function definition_inner($mform) {
         // Fetch global config options
         $globalconf = get_config('filter_medimgviewer');
@@ -41,4 +42,5 @@ class medimgviewer_filter_local_settings_form extends filter_local_settings_form
             ($globalconf && property_exists($globalconf, 'automatic')) ? $globalconf->automatic : 1
         );
     }
+    */
 }

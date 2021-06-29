@@ -26,7 +26,7 @@ $settings->add(new admin_setting_configtext('filter_medimgviewer/filtertag',
     get_string('filtertag', 'filter_medimgviewer'),
     get_string('filtertag_desc', 'filter_medimgviewer'), 'medimg-viewer-media', PARAM_NOTAGS)
 );
-$settings->add(new admin_setting_configtext('filter_medimgviewer/extensions',
-    get_string('extensions', 'filter_medimgviewer'),
-    get_string('extensions_desc', 'filter_medimgviewer'), 'dcm,edf', PARAM_NOTAGS)
-);
+//$settings->add(new admin_setting_configtext('filter_medimgviewer/extensions',
+//    get_string('extensions', 'filter_medimgviewer'),
+//    get_string('extensions_desc', 'filter_medimgviewer'), 'dcm,edf', PARAM_NOTAGS)
+//);

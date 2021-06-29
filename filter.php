@@ -32,7 +32,7 @@ class filter_medimgviewer extends moodle_text_filter {
         global $PAGE;
         $filtertag = get_config('filter_medimgviewer', 'filtertag');
         // Automatically loading files of certain extensions is a bit too invasive, so it's not enabled yet
-        $extensions = explode(',', get_config('filter_medimgviewer', 'extensions'));
+        //$extensions = explode(',', get_config('filter_medimgviewer', 'extensions'));
         if (!is_string($text) or empty($text)) {
             // Non-string data can not be filtered anyway.
             return $text;
