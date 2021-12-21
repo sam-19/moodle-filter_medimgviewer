@@ -1,6 +1,6 @@
 {
   "name": "medimg-moodle-filter",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Filter plugin to display the Medical Imaging Study Viewer in Moodle",
   "main": "index.js",
   "scripts": {
@@ -8,8 +8,12 @@
     "build:viewer": "cd src/imaging-viewer && npm run build:amd && cd ../.. && node node_modules/ncp/bin/ncp ./src/imaging-viewer/dist/medimg-viewer-amd.js ./js/medimg-viewer-amd.min.js",
     "test": "echo \"Warning: Do not run tests on submodule sources here, run them in individual submodule repositories!\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sam-19/medical-imaging-viewer.git"
+  },
   "author": "Sampsa Lohi",
-  "license": "MIT",
+  "license": "GPLV3+",
   "devDependencies": {
     "ncp": "^2.0.0",
     "webpack": "^5.30.0",
