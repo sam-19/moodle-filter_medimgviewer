@@ -25,5 +25,5 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'filter_medimgviewer';
 $plugin->version = 2022092000;
 $plugin->requires = 2016051900;
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->maturity = MATURITY_BETA;
 $plugin->release = '0.0.1';
