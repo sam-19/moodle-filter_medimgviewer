@@ -16,7 +16,7 @@
 
 /** MEDICAL IMAGING STUDY VIEWER FILTER LOCAL SETTINGS
  * @package    medimg-viewer
- * @copyright  2021 Sampsa Lohi
+ * @copyright  2021-2022 Sampsa Lohi & University of Eastern Finland
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

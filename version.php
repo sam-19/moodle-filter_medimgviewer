@@ -16,14 +16,14 @@
 
 /** MEDICAL IMAGING STUDY VIEWER FILTER
  * @package    medimg-viewer
- * @copyright  2021 Sampsa Lohi
+ * @copyright  2021-2022 Sampsa Lohi & University of Eastern Finland
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'filter_medimgviewer';
-$plugin->version = 2021062101;
+$plugin->version = 2022092000;
 $plugin->requires = 2016051900;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->release = '0.0.1';
