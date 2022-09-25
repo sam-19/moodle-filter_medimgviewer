@@ -19,7 +19,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- __webpack_public_path__ = M.cfg.wwwroot + '/filter/medimgviewer/amd/'
+ __webpack_public_path__ = M.cfg.wwwroot + '/filter/medimgviewer/amd/build/'
 
 /**
  * Create a new MedImgViewer instance.
@@ -43,7 +43,7 @@ function init (cmId, resources, locale='en') {
                 appName,
                 idSuffix,
                 locale,
-                M.cfg.wwwroot + '/filter/medimgviewer/amd/'
+                M.cfg.wwwroot + '/filter/medimgviewer/amd/build/'
             )
             viewer.show().then((result) => {
                 if (!result) {
