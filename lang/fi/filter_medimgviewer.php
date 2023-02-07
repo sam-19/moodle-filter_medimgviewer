@@ -15,19 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** MEDICAL IMAGING STUDY VIEWER FILTER
- * @package    medimg-viewer
- * @copyright  2021-2022 Sampsa Lohi & University of Eastern Finland
+ * @package    filter_medimgviewer
+ * @copyright  2021-2023 Sampsa Lohi & University of Eastern Finland
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// Yleiset tekstit
+// Yleiset tekstit.
 $string['filtername'] = 'MedImg-katselin';
 $string['filtername_plural'] = 'MedImg-katselimet';
 
-// Määrittelysivun tekstit
+// Asetussivun tekstit.
 $string['automatic'] = 'Avaa yhteensopivat tiedostot automaattisesti';
 $string['automatic_desc'] = 'Linkitetyt tiedostot, joilla on yhteensopiva tiedostopääte, avataan automaattisesti MedImg-katselimessa. Poista käytöstä, jos haluat mahdollistaa linkitettyjen tiedostojen lataamisen.';
 $string['extensions'] = 'Käytä tiedostopäätteiden kanssa';
 $string['extensions_desc'] = 'Tiedostot, joilla on joku listan päätteistä, avataan automaattisesti MedImg-katselimella. Erottele tiedostopäätteet pilkuilla.';
 $string['filtertag'] = 'MedImg-katselimen mediatunniste';
 $string['filtertag_desc'] = 'MedImg-katselin poimii sisällöstä linkit yhteensopiviin mediaresursseihin tämän tunnisteen perusteella.';
+// Privacy.
+$string['privacy'] = 'filter_medimgviewer-lisäosa ei tallenna mitään käyttäjän henkilökohtaisia tietoja.';

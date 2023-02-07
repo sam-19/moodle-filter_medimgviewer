@@ -14,15 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/** MEDICAL IMAGING STUDY VIEWER FILTER
+/** MEDICAL IMAGING STUDY VIEWER ATTO EDITOR PLUGIN
  * @package    filter_medimgviewer
  * @copyright  2021-2023 Sampsa Lohi & University of Eastern Finland
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace filter_medimgviewer\privacy;
 
-$settings->add(new admin_setting_configtext('filter_medimgviewer/filtertag',
-    get_string('filtertag', 'filter_medimgviewer'),
-    get_string('filtertag_desc', 'filter_medimgviewer'), 'medimg-viewer-media', PARAM_NOTAGS)
-);
+/**
+ * Privacy Subsystem for filter_medimgviewer implementing null_provider.
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason() : string {
+        return 'privacy';
+    }
+}

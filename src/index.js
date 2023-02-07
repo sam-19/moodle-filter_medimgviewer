@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** MEDICAL IMAGING STUDY VIEWER FILTER
- * @package    medimg-viewer
+ * @package    filter_medimgviewer
  * @copyright  2021 Sampsa Lohi
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
