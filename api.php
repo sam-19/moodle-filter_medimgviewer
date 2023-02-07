@@ -15,8 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** MEDICAL IMAGING STUDY VIEWER FILTER
- * @package    medimg-viewer
- * @copyright  2021-2022 Sampsa Lohi & University of Eastern Finland
+ * @package    filter_medimgviewer
+ * @copyright  2021-2023 Sampsa Lohi & University of Eastern Finland
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -24,11 +24,11 @@ require_once('../../config.php');
 require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/moodlelib.php");
 
-$id = optional_param('id', 0, PARAM_INT); // Course module ID
-$fa = optional_param('filearea', '', PARAM_PATH); // Path to the requested file tree
-// Trim the filepath arguments, as the manually inserted part may have a traling space
-$fp = trim(optional_param('filepath', '', PARAM_PATH)); // Path of the root file
-// Check if file path has a trailing slash and remove it
+$id = optional_param('id', 0, PARAM_INT); // Course module ID.
+$fa = optional_param('filearea', '', PARAM_PATH); // Path to the requested file tree.
+// Trim the filepath arguments, as the manually inserted part may have a traling space.
+$fp = trim(optional_param('filepath', '', PARAM_PATH)); // Path of the root file.
+// Check if file path has a trailing slash and remove it.
 if (substr($fp, -1) == '/') {
     $fp = mb_substr($fp, 0, -1);
 }
@@ -46,7 +46,7 @@ if ($id && $fa) {
         if (!empty($dir['subdirs']) && array_key_exists($part, $dir['subdirs'])) {
             $dir = $dir['subdirs'][$part];
         } else if (!empty($dir['files']) && array_key_exists($part, $dir['files'])) {
-            // The file entries are empty, so add at least the file name
+            // The file entries are empty, so add at least the file name.
             $dir['filename'] = $part;
         }
         $path = $path."/".$part;
@@ -58,6 +58,5 @@ if ($id && $fa) {
         'ap' => $areaparts,
         'fp' => $fileparts
     ];
-    //echo(json_encode($result));
     echo json_encode($result);
 }
