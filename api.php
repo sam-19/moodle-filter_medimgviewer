@@ -36,14 +36,15 @@ if (substr($fp, -1) == '/') {
 if ($id && $fa) {
     list($course, $cm) = get_course_and_cm_from_cmid($id);
     require_login($course, true, $cm);
+    $areaparts = explode('/', trim(urldecode($fa)));
     // Check access rights to content.
-    $context = context_module::instance($cm->id);
-    if (!has_capability('mod/folder:view', $context)) {
+    $context_local = context_module::instance($cm->id);
+    $context_farea = context::instance_by_id($areaparts[0]);
+    if (!has_capability('mod/folder:view', $context_local) || !has_capability('mod/folder:view', $context_farea)) {
         header('HTTP/1.1 401 Unauthorized');
         header('Content-Type: application/json');
         die(json_encode(array('message' => 'User is not authorized to view content.', 'code' => 999)));
     }
-    $areaparts = explode('/', trim(urldecode($fa)));
     $fileparts = explode('/', trim(urldecode($fp)));
     $filetree = get_file_storage()->get_area_tree($areaparts[0], $areaparts[1], $areaparts[2], false);
     $dir = $filetree;
